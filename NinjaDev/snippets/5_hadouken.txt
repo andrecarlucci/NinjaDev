@@ -1,0 +1,26 @@
+﻿var win = new Windows();
+var k = win.Keyboard;
+
+Action hadouken = () => {
+    k.Press(VirtualKey.Down).Wait(20);
+    k.Press(VirtualKey.Right).Wait(20);
+    k.Release(VirtualKey.Down);
+    k.Press(VirtualKey.X).Wait(20);
+    k.Release(VirtualKey.Right);
+    k.Release(VirtualKey.X);
+    Console.WriteLine("----------------------------------> hadouken!");
+};
+
+var cam = Camera.Create(Capability.HandTracking);
+cam.LeftHand.Visible += (sender, eventArgs) => {
+    Console.WriteLine("Esquerda Visivel");
+};
+var movement = Movement.Forward(cam.LeftHand, 8);
+movement.Completed += () => {
+    hadouken.Invoke();
+};
+movement.Activate();
+
+cam.Start();
+
+Console.ReadLine();
